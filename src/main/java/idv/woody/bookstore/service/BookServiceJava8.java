@@ -43,6 +43,10 @@ public class BookServiceJava8 {
     }
 
     public void sort(List<Book> books) {
-        Collections.sort(books, Comparator.comparing(Book::getPublisher).thenComparing(Book::getPrice));
+        sort(books, Comparator.comparing(Book::getPublisher).thenComparing(Book::getPrice));
+    }
+
+    public void sort(List<Book> books, Comparator<Book> comparator) {
+        Collections.sort(books, comparator);
     }
 }

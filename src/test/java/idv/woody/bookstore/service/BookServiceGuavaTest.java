@@ -66,7 +66,6 @@ public class BookServiceGuavaTest {
         };
         Optional<Book> found = unit.postFilterFirstMatch(bookDao.findAll(), new Predicate[]{titleLike, priceUnder});
         assertThat("At least one book should be found", found.isPresent());
-        System.out.println(found);
         assertThat(found.get().getTitle(), is(javaPerformance.getTitle()));
     }
 

@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -41,7 +42,10 @@ public class BookServiceJava8Test {
 
     @Test
     public void testFindNull() throws Exception {
-
+        Optional<Book> bookNull = unit.findNull();
+        if (bookNull.isPresent()) {
+            System.out.println("Title: " + bookNull.get().getTitle());
+        }
     }
 
     @Test
@@ -50,8 +54,8 @@ public class BookServiceJava8Test {
         java.util.function.Predicate<Book> titlePredicate = b -> b.getTitle().contains("Concurrency");
         java.util.function.Predicate<Book> aggregatedPredicate = pricePredicate.and(titlePredicate);
         Optional<Book> found = unit.postFilterFirstMatch(bookDao.findAll(), aggregatedPredicate);
-        System.out.println(found.isPresent());
-        System.out.println(found.get());
+        assertThat("At least one book should be found", found.isPresent());
+        assertThat(found.get().getTitle(), is(javaConcurrency.getTitle()));
     }
 
     @Test

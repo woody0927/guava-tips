@@ -10,6 +10,7 @@ import com.google.common.collect.Multimaps;
 import com.google.common.collect.Ordering;
 import idv.woody.bookstore.dao.BookDao;
 import idv.woody.bookstore.model.Book;
+import idv.woody.bookstore.model.BookFunctionsGuava;
 import idv.woody.bookstore.model.BookOrders;
 
 import java.util.Collections;
@@ -32,8 +33,9 @@ public class BookServiceGuava {
 
     public Optional<Book> postFilterFirstMatch(final List<Book> books, final Predicate... predicates) {
         Optional<Book> firstMatch = Optional.absent();
+        Predicate andPredicate = Predicates.and(predicates);
         for (Book book : books) {
-            if (Predicates.and(predicates).apply(book)) {
+            if (andPredicate.apply(book)) {
                 firstMatch = Optional.of(book);
                 break;
             }
@@ -42,22 +44,12 @@ public class BookServiceGuava {
     }
 
     public List<String> listTitles(final List<Book> books, final Predicate... predicates) {
-        return FluentIterable.from(books).filter(Predicates.and(predicates)).transform(new Function<Book, String>() {
-            @Override
-            public String apply(Book book) {
-                return book.getTitle();
-            }
-        }).toList();
+        return FluentIterable.from(books).filter(Predicates.and(predicates)).transform(BookFunctionsGuava.GET_TITLE).toList();
     }
 
     public ListMultimap<String, Book> listByPublisher() {
         List<Book> books = bookDao.findAll();
-        return Multimaps.index(books, new Function<Book, String>() {
-            @Override
-            public String apply(Book book) {
-                return book.getPublisher();
-            }
-        });
+        return Multimaps.index(books, BookFunctionsGuava.GET_PUBLISHER);
     }
 
     public List<Book> sort(List<Book> books) {
