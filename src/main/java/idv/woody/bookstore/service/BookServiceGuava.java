@@ -53,7 +53,7 @@ public class BookServiceGuava {
     }
 
     public List<Book> sort(List<Book> books) {
-        return sort(books, BookOrders.PUBLISHER_ASC.compound(BookOrders.PRICE_ASC));
+        return sort(books, BookOrders.PUBLISHER_ASC.compound(BookOrders.PRICE_ASC).nullsLast());
     }
 
     public List<Book> sort(List<Book> books, Ordering<Book> ordering) {

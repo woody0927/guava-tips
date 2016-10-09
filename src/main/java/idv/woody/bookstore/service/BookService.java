@@ -2,6 +2,7 @@ package idv.woody.bookstore.service;
 
 import idv.woody.bookstore.dao.BookDao;
 import idv.woody.bookstore.model.Book;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 
@@ -20,15 +21,27 @@ public class BookService {
         return bookDao.findNull();
     }
 
-    public Book postFilterFirstMatch(final List<Book> books, final String titleLike, final int priceUnder) {
+    public Book postFilterFirstMatch(final List<Book> books, final String titleLike, final Integer priceUnder) {
         for (Book book : books) {
-            boolean matchedTitle = book.getTitle().contains(titleLike);
-            boolean matchedPrice = book.getPrice() < priceUnder;
+            boolean matchedTitle = StringUtils.isNotBlank(titleLike) ? book.getTitle().contains(titleLike) : true;
+            boolean matchedPrice = priceUnder != null ? book.getPrice() < priceUnder : true;
             if (matchedTitle && matchedPrice) {
                 return book;
             }
         }
         return null;
+    }
+
+    public List<String> listTitles(final List<Book> books, final String titleLike, final Integer priceUnder) {
+        List<String> titles = new ArrayList<>();
+        for (Book book : books) {
+            boolean matchedTitle = StringUtils.isNotBlank(titleLike) ? book.getTitle().contains(titleLike) : true;
+            boolean matchedPrice = priceUnder != null ? book.getPrice() < priceUnder : true;
+            if (matchedTitle && matchedPrice) {
+                titles.add(book.getTitle());
+            }
+        }
+        return titles;
     }
 
     public Map<String, List<Book>> listByPublisher() {

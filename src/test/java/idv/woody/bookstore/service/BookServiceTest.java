@@ -54,6 +54,14 @@ public class BookServiceTest {
     }
 
     @Test
+    public void testListTitles() throws Exception {
+        final String titleLike = "Performance";
+        final int priceUnder = 1500;
+        List<String> qualifiedBookTitles = unit.listTitles(bookDao.findAll(), titleLike, priceUnder);
+        assertThat(qualifiedBookTitles, containsInAnyOrder(javaPerformance.getTitle()));
+    }
+
+    @Test
     public void testListByPublisher() throws Exception {
         Map<String, List<Book>> publisherListMap = unit.listByPublisher();
         assertThat(publisherListMap.get("Manning"), containsInAnyOrder(dockerInPractice));
