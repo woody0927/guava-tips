@@ -19,6 +19,6 @@ public class Spider implements Callable<String> {
         System.out.println("About to crawl " + url);
         long tenSeconds = 10000L;
         Thread.sleep(tenSeconds);
-        return String.format("Result of %s is %s", url, randomAlphanumeric(10));
+        return randomAlphanumeric(10);
     }
 }
