@@ -62,7 +62,9 @@ public class BookService {
         Comparator<Book> comparator = new Comparator<Book>() {
             @Override
             public int compare(Book b1, Book b2) {
-                int result = b1.getPublisher().compareTo(b2.getPublisher());
+                int result = b1.getPublisher() == null ?
+                        (b2.getPublisher() == null ? 0 : Integer.MIN_VALUE) :
+                        (b2.getPublisher() == null ? Integer.MAX_VALUE : b1.getPublisher().compareTo(b2.getPublisher()));
                 if (result == 0) {
                     result = b1.getPrice() < b2.getPrice() ? -1 : (b1.getPrice() > b2.getPrice()) ? 1 : 0;
                 }
